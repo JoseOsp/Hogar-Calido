@@ -1,6 +1,6 @@
-package com.hogarcalido.backend.repository;
+package com.hogarcalido.repository;
 
-import com.hogarcalido.backend.model.Producto;
+import com.hogarcalido.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

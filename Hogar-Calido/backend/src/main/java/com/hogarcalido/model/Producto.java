@@ -1,4 +1,4 @@
-package com.hogarcalido.backend.model;
+package com.hogarcalido.model;
 
 import jakarta.persistence.*;
 

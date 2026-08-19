@@ -1,11 +1,12 @@
-package com.hogarcalido.backend.service;
+package com.hogarcalido.service;
 
-import com.hogarcalido.backend.model.Producto;
-import com.hogarcalido.backend.repository.ProductoRepository;
+import com.hogarcalido.model.Producto;
+import com.hogarcalido.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductoService {
@@ -13,19 +14,19 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    public List<Producto> listarTodos() {
+    public List<Producto> obtenerTodos() {
         return productoRepository.findAll();
     }
 
-    public Producto buscarPorId(Long id) {
-        return productoRepository.findById(id).orElse(null);
+    public Optional<Producto> obtenerPorId(Long id) {
+        return productoRepository.findById(id);
     }
 
-    public Producto guardarProducto(Producto producto) {
+    public Producto guardar(Producto producto) {
         return productoRepository.save(producto);
     }
 
-    public void eliminarProducto(Long id) {
+    public void eliminar(Long id) {
         productoRepository.deleteById(id);
     }
 }

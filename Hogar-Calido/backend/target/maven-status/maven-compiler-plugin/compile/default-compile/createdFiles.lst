@@ -1,0 +1,5 @@
+com\hogarcalido\controller\ProductoController.class
+com\hogarcalido\model\Producto.class
+com\hogarcalido\repository\ProductoRepository.class
+com\hogarcalido\service\ProductoService.class
+com\hogarcalido\BackendApplication.class
