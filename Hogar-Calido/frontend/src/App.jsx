@@ -1,3 +1,4 @@
+import { Admin } from './pages/Admin';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Login } from './pages/Login';
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
       </Routes>
     </Router>
