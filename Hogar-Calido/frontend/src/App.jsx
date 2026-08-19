@@ -1,28 +1,21 @@
-import { Admin } from './pages/Admin';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Header } from './components/Header';
-import { Login } from './pages/Login';
-import { Register } from './pages/Register';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Home } from './pages/Home';
 import { ProductDetail } from './pages/ProductDetail';
-
-// Un componente rápido de Home para listar productos
-const Home = () => (
-  <div style={{ padding: '40px', textAlign: 'center' }}>
-    <h1>Bienvenidos a Hogar Cálido</h1>
-    <p>Selecciona un producto para ver sus detalles y características.</p>
-  </div>
-);
+import { Admin } from './pages/Admin';
 
 function App() {
   return (
     <Router>
-      <Header />
+      {/* Navegación básica temporal */}
+      <nav style={{ padding: '15px 30px', backgroundColor: '#2d3748', color: 'white', display: 'flex', gap: '20px' }}>
+        <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Inicio</Link>
+        <Link to="/admin" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Panel Admin</Link>
+      </nav>
+
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/producto/:id" element={<ProductDetail />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </Router>
   );
