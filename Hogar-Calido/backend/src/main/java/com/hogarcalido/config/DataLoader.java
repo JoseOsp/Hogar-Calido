@@ -51,7 +51,7 @@ public class DataLoader {
                         "Silla Ergonómica de Escritorio",
                         "Perfecta para oficina en casa con soporte lumbar.",
                         120.00,
-                        "c:\Users\pc\Downloads\image silla ergonomica.jpeg",
+                        "https://images.unsplash.com/photo-1587825140708-1c3e1f0b5f4e",
                         "Oficina"
                     )
                 );
