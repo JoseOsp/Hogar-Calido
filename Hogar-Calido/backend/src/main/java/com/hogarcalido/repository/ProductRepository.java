@@ -1,9 +1,9 @@
 package com.hogarcalido.repository;
 
-import com.hogarcalido.model.Producto;
+import com.hogarcalido.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 }

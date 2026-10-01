@@ -1,55 +1,60 @@
 package com.hogarcalido.config;
 
-import com.hogarcalido.model.Caracteristica;
-import com.hogarcalido.model.Categoria;
-import com.hogarcalido.model.Producto;
-import com.hogarcalido.repository.CaracteristicaRepository;
-import com.hogarcalido.repository.CategoriaRepository;
-import com.hogarcalido.repository.ProductoRepository;
+import com.hogarcalido.model.Product;
+import com.hogarcalido.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 public class DataLoader {
 
     @Bean
-    CommandLineRunner initDatabase(
-            ProductoRepository productoRepo,
-            CategoriaRepository categoriaRepo,
-            CaracteristicaRepository caracteristicaRepo) {
+    CommandLineRunner initDatabase(ProductRepository productRepository) {
+
         return args -> {
-            if (productoRepo.count() == 0) {
-                // 1. Crear Categorías iniciales
-                Categoria cabanas = categoriaRepo.save(new Categoria("Cabañas", "Alojamiento acogedor en la naturaleza", "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb"));
-                Categoria deptos = categoriaRepo.save(new Categoria("Departamentos", "Ubicaciones céntricas y modernas", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688"));
 
-                // 2. Crear Características iniciales
-                Caracteristica wifi = caracteristicaRepo.save(new Caracteristica("WiFi", "wifi"));
-                Caracteristica tv = caracteristicaRepo.save(new Caracteristica("Televisor", "tv"));
-                Caracteristica aire = caracteristicaRepo.save(new Caracteristica("Aire acondicionado", "snowflake"));
-                Caracteristica cocina = caracteristicaRepo.save(new Caracteristica("Cocina", "utensils"));
+            if (productRepository.count() == 0) {
 
-                // 3. Crear Productos de prueba con sus relaciones asociadas
-                productoRepo.save(new Producto(
-                    "Cabaña Alpina", 
-                    "Hermosa cabaña en la montaña con vista panorámica y chimenea.", 
-                    120.0, 
-                    "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
-                    cabanas,
-                    List.of(wifi, tv, cocina)
-                ));
+                productRepository.save(
+                    new Product(
+                        "Sofá Moderno Minimalista",
+                        "Sofá tapizado en tela de alta resistencia, ideal para salas.",
+                        450.00,
+                        "https://images.unsplash.com/photo-1555041469-a586c61ea9bc",
+                        "Salas"
+                    )
+                );
 
-                productoRepo.save(new Producto(
-                    "Departamento Centro", 
-                    "Moderno departamento monoambiente equipado en el centro de la ciudad.", 
-                    85.0, 
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-                    deptos,
-                    List.of(wifi, tv, aire)
-                ));
+                productRepository.save(
+                    new Product(
+                        "Mesa de Comedor Elegante",
+                        "Comedor de madera de roble con capacidad para 6 personas.",
+                        320.00,
+                        "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf",
+                        "Comedores"
+                    )
+                );
+
+                productRepository.save(
+                    new Product(
+                        "Cama King Size Confort",
+                        "Estructura de madera sólida con cabecera capitonada.",
+                        550.00,
+                        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85",
+                        "Dormitorios"
+                    )
+                );
+
+                productRepository.save(
+                    new Product(
+                        "Silla Ergonómica de Escritorio",
+                        "Perfecta para oficina en casa con soporte lumbar.",
+                        120.00,
+                        "c:\Users\pc\Downloads\image silla ergonomica.jpeg",
+                        "Oficina"
+                    )
+                );
             }
         };
     }

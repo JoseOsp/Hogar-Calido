@@ -1,139 +1,71 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export const Admin = () => {
-  // Estados para Categorías
-  const [categoria, setCategoria] = useState({ titulo: '', descripcion: '', urlImagen: '' });
-  // Estados para Características
-  const [caracteristica, setCaracteristica] = useState({ nombre: '', icono: '' });
-  // Estados para Usuarios
-  const [usuarios, setUsuarios] = useState([]);
-  const [mensaje, setMensaje] = useState('');
+  const [categories, setCategories] = useState([
+    { id: 1, name: 'Salón y Sofás', count: 120 },
+    { id: 2, name: 'Comedor y Sillas', count: 85 },
+    { id: 3, name: 'Dormitorio', count: 94 }
+  ]);
 
-  useEffect(() => {
-    cargarUsuarios();
-  }, []);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
-  const cargarUsuarios = async () => {
-    try {
-      const res = await fetch('http://localhost:8080/api/auth/usuarios');
-      if (res.ok) {
-        const data = await res.json();
-        setUsuarios(data);
-      }
-    } catch (err) {
-      console.error('Error al cargar usuarios:', err);
-    }
-  };
-
-  // Guardar nueva categoría (US #21)
-  const handleCategoriaSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:8080/api/categorias', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(categoria)
-      });
-      if (res.ok) {
-        setMensaje('Categoría creada con éxito');
-        setCategoria({ titulo: '', descripcion: '', urlImagen: '' });
-      }
-    } catch (err) {
-      setMensaje('Error al crear categoría');
-    }
-  };
-
-  // Guardar nueva característica (US #17)
-  const handleCaracteristicaSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:8080/api/caracteristicas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(caracteristica)
-      });
-      if (res.ok) {
-        setMensaje('Característica agregada con éxito');
-        setCaracteristica({ nombre: '', icono: '' });
-      }
-    } catch (err) {
-      setMensaje('Error al crear característica');
-    }
-  };
-
-  // Cambiar rol de usuario (US #16)
-  const handleCambiarRol = async (id, nuevoRol) => {
-    try {
-      const res = await fetch(`http://localhost:8080/api/auth/usuarios/${id}/rol`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rol: nuevoRol })
-      });
-      if (res.ok) {
-        setMensaje('Rol actualizado correctamente');
-        cargarUsuarios();
-      }
-    } catch (err) {
-      setMensaje('Error al actualizar el rol');
+  const confirmDeleteCategory = () => {
+    if (categoryToDelete) {
+      setCategories(categories.filter(cat => cat.id !== categoryToDelete.id));
+      setCategoryToDelete(null);
     }
   };
 
   return (
-    <div style={{ maxWidth: '900px', margin: '30px auto', padding: '20px' }}>
-      <h1>Panel de Administración</h1>
-      {mensaje && <p style={{ padding: '10px', backgroundColor: '#e2e8f0', borderRadius: '4px' }}>{mensaje}</p>}
-
-      {/* Sección 1: Crear Categoría */}
-      <section style={{ marginBottom: '40px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-        <h2>Agregar Nueva Categoría</h2>
-        <form onSubmit={handleCategoriaSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <input type="text" placeholder="Título" value={categoria.titulo} onChange={(e) => setCategoria({...categoria, titulo: e.target.value})} required style={{ padding: '8px' }} />
-          <input type="text" placeholder="Descripción" value={categoria.descripcion} onChange={(e) => setCategoria({...categoria, descripcion: e.target.value})} required style={{ padding: '8px' }} />
-          <input type="text" placeholder="URL de la Imagen" value={categoria.urlImagen} onChange={(e) => setCategoria({...categoria, urlImagen: e.target.value})} required style={{ padding: '8px' }} />
-          <button type="submit" style={{ padding: '10px', backgroundColor: '#3182ce', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Guardar Categoría</button>
-        </form>
-      </section>
-
-      {/* Sección 2: Crear Característica */}
-      <section style={{ marginBottom: '40px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-        <h2>Agregar Característica</h2>
-        <form onSubmit={handleCaracteristicaSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <input type="text" placeholder="Nombre (ej. WiFi, Pileta)" value={caracteristica.nombre} onChange={(e) => setCaracteristica({...caracteristica, nombre: e.target.value})} required style={{ padding: '8px' }} />
-          <input type="text" placeholder="Nombre de ícono o clase" value={caracteristica.icono} onChange={(e) => setCaracteristica({...caracteristica, icono: e.target.value})} style={{ padding: '8px' }} />
-          <button type="submit" style={{ padding: '10px', backgroundColor: '#38a169', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Guardar Característica</button>
-        </form>
-      </section>
-
-      {/* Sección 3: Asignar Roles de Usuario */}
-      <section style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-        <h2>Gestión de Usuarios y Permisos</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+    <div style={{ maxWidth: '900px', margin: '40px auto', padding: '0 20px', fontFamily: "'Inter', sans-serif" }}>
+      <h2 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '20px' }}>Panel de Administración - Gestión de Categorías</h2>
+      
+      <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '20px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: '#f7fafc', textAlign: 'left' }}>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Usuario</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Email</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Rol Actual</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Acción</th>
+            <tr style={{ borderBottom: '2px solid #f1f5f9', textAlign: 'left' }}>
+              <th style={{ padding: '12px', fontSize: '14px' }}>Categoría</th>
+              <th style={{ padding: '12px', fontSize: '14px' }}>Productos Asociados</th>
+              <th style={{ padding: '12px', fontSize: '14px', textAlign: 'right' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {usuarios.map((u) => (
-              <tr key={u.id}>
-                <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>{u.nombre} {u.apellido}</td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>{u.email}</td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}><strong>{u.rol}</strong></td>
-                <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
-                  {u.rol === 'ROLE_ADMIN' ? (
-                    <button onClick={() => handleCambiarRol(u.id, 'ROLE_USER')} style={{ padding: '5px 10px', backgroundColor: '#e53e3e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Quitar Admin</button>
-                  ) : (
-                    <button onClick={() => handleCambiarRol(u.id, 'ROLE_ADMIN')} style={{ padding: '5px 10px', backgroundColor: '#3182ce', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Hacer Admin</button>
-                  )}
+            {categories.map((cat) => (
+              <tr key={cat.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <td style={{ padding: '12px', fontSize: '14px', fontWeight: '600' }}>{cat.name}</td>
+                <td style={{ padding: '12px', fontSize: '14px', color: '#64748b' }}>{cat.count} productos</td>
+                <td style={{ padding: '12px', textAlign: 'right' }}>
+                  <button 
+                    onClick={() => setCategoryToDelete(cat)}
+                    style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '6px 12px', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '13px' }}>
+                    🗑️ Eliminar
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </section>
+      </div>
+
+      {/* Modal Preventivo de Confirmación (HU #29)[cite: 3] */}
+      {categoryToDelete && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '12px', width: '400px', maxWidth: '90%', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}>
+            <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#dc2626', fontWeight: '700' }}>¿Estás seguro de eliminar esta categoría?</h3>
+            <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.5', marginBottom: '20px' }}>
+              Estás a punto de eliminar la categoría <strong>{categoryToDelete.name}</strong>. Esta acción podría afectar a los <strong>{categoryToDelete.count} productos asociados</strong> a la misma.
+            </p>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={() => setCategoryToDelete(null)} style={{ flex: 1, padding: '10px', background: '#f1f5f9', color: '#0f172a', border: '1px solid #cbd5e1', borderRadius: '6px', fontWeight: '600', cursor: 'pointer' }}>
+                Cancelar
+              </button>
+              <button onClick={confirmDeleteCategory} style={{ flex: 1, padding: '10px', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: '600', cursor: 'pointer' }}>
+                Confirmar y eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

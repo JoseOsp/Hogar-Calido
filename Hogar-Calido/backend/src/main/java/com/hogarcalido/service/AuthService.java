@@ -1,7 +1,7 @@
 package com.hogarcalido.service;
 
-import com.hogarcalido.model.User;
-import com.hogarcalido.repository.UserRepository;
+import com.hogarcalido.model.Usuario;
+import com.hogarcalido.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,28 +12,36 @@ import java.util.Optional;
 public class AuthService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public User register(User user) {
-        // Encriptar obligatoriamente la contraseña
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Asegurar rol estándar por defecto
-        if (user.getRole() == null) {
-            user.setRole("ROLE_USER");
+    public Usuario register(Usuario usuario) {
+        usuario.setPassword(
+            passwordEncoder.encode(usuario.getPassword())
+        );
+
+        if (usuario.getRol() == null || usuario.getRol().isBlank()) {
+            usuario.setRol("ROLE_USER");
         }
-        return userRepository.save(user);
+
+        return usuarioRepository.save(usuario);
     }
 
-    public Optional<User> login(String email, String rawPassword) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
-        if (userOpt.isPresent()) {
-            if (passwordEncoder.matches(rawPassword, userOpt.get().getPassword())) {
-                return userOpt;
+    public Optional<Usuario> login(String email, String rawPassword) {
+        Optional<Usuario> usuarioOpt =
+                usuarioRepository.findByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            if (passwordEncoder.matches(
+                    rawPassword,
+                    usuarioOpt.get().getPassword())) {
+
+                return usuarioOpt;
             }
         }
+
         return Optional.empty();
     }
 }
