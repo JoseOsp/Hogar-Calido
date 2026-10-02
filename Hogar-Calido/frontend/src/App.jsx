@@ -5,7 +5,7 @@ import ProductDetail from './pages/ProductDetail';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Navbar } from './components/NavBar';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './Context/AuthContext';
 
 function App() {
   return (
